@@ -1,0 +1,4 @@
+refund_id,order_id,refund_date,amount,reason
+R1001,O1005,2025-02-01,10.00,late_delivery
+R1002,O1011,2025-03-12,20.00,damaged
+R1003,O1017,2025-04-20,12.00,wrong_size

@@ -1,0 +1,9 @@
+product_id,sku,name,category,brand,unit_cost
+P001,EL-100,Wireless Headphones,electronics,NorthAudio,42
+P002,EL-200,USB-C Hub,electronics,PortMax,24
+P003,AC-100,Laptop Sleeve,accessories,SoftCase,9
+P004,HM-100,Smart Lamp,home,Lightly,18
+P005,SP-100,Yoga Mat,sports,FlexPro,12
+P006,AC-200,Travel Organizer,accessories,PackWell,8
+P007,EL-300,Mechanical Keyboard,electronics,TypeLab,58
+P008,HM-200,Air Purifier Filter,home,CleanRoom,14

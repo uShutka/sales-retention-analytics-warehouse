@@ -5,4 +5,4 @@ COPY src ./src
 COPY data ./data
 COPY dashboard ./dashboard
 RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir .
-CMD ["python", "-m", "sales_retention_analytics_warehouse.core"]
+CMD ["uvicorn", "sales_retention_analytics_warehouse.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

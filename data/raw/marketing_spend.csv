@@ -1,0 +1,13 @@
+spend_date,channel,campaign,spend
+2025-01-01,paid_search,winter_search,280
+2025-01-01,social,winter_social,160
+2025-01-01,affiliate,partner_q1,120
+2025-02-01,paid_search,winter_search,330
+2025-02-01,email,retention_email,70
+2025-02-01,organic,seo_content,90
+2025-03-01,paid_search,spring_search,420
+2025-03-01,social,spring_social,230
+2025-03-01,affiliate,partner_q1,160
+2025-04-01,paid_search,spring_search,390
+2025-04-01,email,retention_email,90
+2025-04-01,organic,seo_content,110

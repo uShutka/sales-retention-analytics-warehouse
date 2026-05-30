@@ -1,105 +1,154 @@
-# Sales Retention Analytics Warehouse
+# Sales & Retention Analytics Warehouse
 
-    ![Dashboard screenshot](docs/screenshots/dashboard-overview.png)
+End-to-end sales analytics warehouse with raw data ingestion, cleaning, SQL-style staging, analytical marts, retention analytics, LTV, RFM segmentation, forecasting, FastAPI endpoints, and a Streamlit dashboard.
 
-    ## Project Overview
+## Project Overview
 
-    End-to-end analytics warehouse for sales, retention, cohort reporting, LTV, RFM segmentation, and business recommendations.
+This project demonstrates how raw e-commerce data can be turned into a reliable analytics layer for business decisions. It uses a warehouse-style structure: raw tables, cleaning logic, staging SQL examples, mart builders, KPI services, API endpoints, dashboard views, tests, Docker, and CI.
 
-    ## Business Problem
+## Business Problem
 
-    Many businesses rely on manual data collection, spreadsheets, and repeated browser actions. This creates slow workflows, human errors, outdated reports, and poor visibility into business metrics.
+Many e-commerce teams look only at revenue charts. That hides the real questions: whether margin is healthy, which channels bring valuable customers, whether repeat purchase happens quickly enough, and which customers/products deserve attention.
 
-    ## Solution
+## Solution
 
-    This project automates the workflow: data collection, cleaning, validation, structured storage, analytical metrics, dashboard/report output, and production-style tests/CI.
+The project loads raw commerce tables, validates and cleans them, builds reusable marts, calculates business KPIs, exposes the metrics through FastAPI, and visualizes the results in Streamlit.
 
-    ## Architecture
+## Architecture
 
-    ![Architecture](docs/architecture.png)
+```text
+Raw CSV Tables
+-> Cleaning & Normalization
+-> Staging SQL Layer
+-> Analytical Marts
+-> KPI / Forecast / Recommendation Services
+-> FastAPI + Streamlit Dashboard
+```
 
-    ```text
-    Data Sources -> Validation & Cleaning -> Analytical Models -> API / Dashboard / Reports
-    ```
+## Features
 
-    ## Features
+- Raw tables: `orders`, `customers`, `products`, `payments`, `refunds`, `marketing_spend`
+- Staging SQL scripts and Python mart builders
+- Marts: `mart_daily_revenue`, `mart_customer_ltv`, `mart_cohort_retention`, `mart_product_profitability`, `mart_marketing_roi`, `mart_rfm_segments`
+- KPI calculations: revenue, gross profit, gross margin, AOV, repeat purchase rate, refund rate, LTV, CAC, ROAS
+- Cohort retention matrix
+- RFM customer segmentation
+- Simple revenue forecast
+- Business recommendation engine
+- REST API and dashboard
+- Dockerized setup and GitHub Actions CI
 
-    - Clean project structure
-    - Sample data and reproducible analytics
-    - Validation and transformation logic
-    - Analytical metrics
-    - Dashboard/report-ready output
-    - Dockerized setup
-    - Automated tests
-    - GitHub Actions CI
+## Tech Stack
 
-    ## Tech Stack
+Python, pandas, SQL, PostgreSQL-ready SQL scripts, FastAPI, Streamlit, Plotly, Docker, pytest, ruff, GitHub Actions.
 
-    Python, SQL, PostgreSQL, pandas, Streamlit, Docker, pytest
+## Database Schema
 
-    ## Database Schema
+Raw layer:
 
-    Main entities:
+- `orders(order_id, customer_id, product_id, order_date, quantity, unit_price, discount_pct, status)`
+- `customers(customer_id, signup_date, acquisition_channel, country)`
+- `products(product_id, sku, name, category, brand, unit_cost)`
+- `payments(payment_id, order_id, payment_date, amount, currency, payment_method, status)`
+- `refunds(refund_id, order_id, refund_date, amount, reason)`
+- `marketing_spend(spend_date, channel, campaign, spend)`
 
-    - customers
-- orders
-- cohorts
-- rfm_segments
-- analytical_marts
+Analytical marts:
 
-    ## Data Pipeline
+- `mart_daily_revenue`
+- `mart_customer_ltv`
+- `mart_cohort_retention`
+- `mart_product_profitability`
+- `mart_marketing_roi`
+- `mart_rfm_segments`
 
-    ```text
-    Raw data -> pandas transformations -> metrics -> business conclusions -> dashboard/report
-    ```
+## Data Pipeline
 
-    ## API Endpoints
+1. Load raw CSV files from `data/raw`.
+2. Normalize dates, numeric fields, statuses, countries, and acquisition channels.
+3. Build order-level facts with revenue, net revenue, COGS, gross profit, and refunds.
+4. Build reusable marts for revenue, retention, LTV, product profitability, marketing ROI, and RFM.
+5. Serve analytics through API endpoints and Streamlit dashboard.
 
-    - GET /health
-- GET /analytics/summary
-- GET /analytics/cohorts
-- GET /analytics/rfm
+## API Endpoints
 
-    ## Dashboard Screenshots
+- `GET /health`
+- `GET /analytics/summary`
+- `GET /analytics/monthly-growth`
+- `GET /analytics/business-findings`
+- `GET /analytics/recommendations`
+- `GET /analytics/forecast`
+- `GET /marts/daily-revenue`
+- `GET /marts/customer-ltv`
+- `GET /marts/cohort-retention`
+- `GET /marts/product-profitability`
+- `GET /marts/marketing-roi`
+- `GET /marts/rfm-segments`
 
-    ![Dashboard overview](docs/screenshots/dashboard-overview.png)
+## Dashboard Screenshots
 
-    ## Analytics Results
+Screenshots are stored in `docs/screenshots/`:
 
-    - Best channel by LTV is calculated from transactional data.
-- Cohort retention highlights repeat-purchase behavior.
-- RFM segments separate VIP, loyal, at-risk, and dormant customers.
+- Revenue dashboard
+- Cohort retention heatmap
+- RFM segmentation
+- LTV and product profitability view
+- SQL data model
+- Business conclusions page
 
-    ## How to Run
+## Analytics Results
 
-    ```bash
-    python -m pip install -e .
-    pytest
-    docker compose up --build
-    ```
+Example conclusions from the included demo dataset:
 
-    ## Tests
+- Revenue increased in the latest month while margin risk remains visible in discount-heavy products.
+- Paid search creates volume, but high ROAS channels should be protected before scaling spend.
+- The second purchase window should be targeted within 14-21 days; after day 30 repeat probability drops.
+- Top 20% of customers generate a disproportionate share of total revenue.
+- Low-margin products should be reviewed before additional promotions are launched.
 
-    ```bash
-    pytest
-    ```
+## How to Run
 
-    The test suite covers transformation logic, metrics, validation/scoring rules, and output generation.
+```bash
+docker compose up --build
+```
 
-    ## Engineering Notes
+Open:
 
-    This project is designed as a production-style portfolio system, not a one-file script. It includes modular architecture, configuration, Docker setup, automated tests, CI, sample data, docs, and business-facing conclusions.
+- API docs: `http://localhost:8001/docs`
+- Dashboard: `http://localhost:8502`
 
-    ## Known Limitations
+Local development:
 
-    - Demo data is used for portfolio purposes.
-    - External integrations are represented with sample data or replaceable adapters.
-    - Historical analysis becomes stronger as more data is collected.
+```bash
+python -m pip install -e .
+uvicorn sales_retention_analytics_warehouse.api.main:app --reload
+streamlit run dashboard/streamlit_app.py
+```
 
-    ## Future Improvements
+## Tests
 
-    - Add PostgreSQL persistence
-    - Add authentication
-    - Add background workers
-    - Add advanced anomaly detection
-    - Add export to PDF/Excel reports
+```bash
+pytest
+ruff check .
+```
+
+The suite covers cleaning, mart generation, KPI calculations, cohort retention, RFM segmentation, forecasting, recommendations, and API endpoints.
+
+## Engineering Notes
+
+This is structured as a production-style analytics case rather than a notebook. Business logic lives in testable modules, SQL examples document the intended warehouse layers, and the API/dashboard consume the same analytical services.
+
+## Known Limitations
+
+- Demo CSV data is intentionally compact for portfolio review.
+- The SQL scripts are warehouse-model examples; the local demo uses pandas for fast reproducibility.
+- Forecasting uses a simple moving average, not a full statistical model.
+- Attribution is based on acquisition channel, not multi-touch attribution.
+
+## Future Improvements
+
+- Add dbt project scaffolding and warehouse materialization.
+- Add Metabase dashboards on top of PostgreSQL.
+- Add Airflow or Prefect scheduled runs.
+- Add advanced retention prediction and churn scoring.
+- Export board-ready PDF/Excel analytics packs.
